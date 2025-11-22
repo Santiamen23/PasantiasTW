@@ -1,0 +1,6 @@
+@PasantiasTW_HostAddress = http://localhost:5049
+
+GET {{PasantiasTW_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
