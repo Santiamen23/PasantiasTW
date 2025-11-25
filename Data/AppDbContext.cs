@@ -11,6 +11,8 @@ namespace PasantiasTW.Data
         {
         }
         public DbSet<User> Users => Set<User>();
+        public DbSet<Tutor> Tutors => Set<Tutor>();
+
         public DbSet<Student> Students => Set<Student>();
         public DbSet<Company> Companies => Set<Company>();
         public DbSet<StudentCompany> StudentsCompanies => Set<StudentCompany>();
@@ -18,6 +20,7 @@ namespace PasantiasTW.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<User>();
+            modelBuilder.Entity<Tutor>();
 
             modelBuilder.Entity<StudentCompany>()
                 .HasKey(ee => new { ee.StudentID, ee.CompanyID });

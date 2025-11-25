@@ -131,6 +131,8 @@ else if (string.IsNullOrEmpty(connectionString))
 
 builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITutorRepository, TutorRepository>();
+builder.Services.AddScoped<ITutorService, TutorService>();
 builder.Services.AddDbContext<AppDbContext>(
     options=>
         options.UseNpgsql(connectionString));
