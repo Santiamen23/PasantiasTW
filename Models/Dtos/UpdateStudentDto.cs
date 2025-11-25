@@ -1,6 +1,6 @@
 ﻿namespace PasantiasTW.Models.Dtos
 {
-    public record UpdateStudent
+    public record UpdateStudentDto
     {
         public string? Name { get; set; } 
         public string? Email {  get; set; } 
