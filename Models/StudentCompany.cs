@@ -1,8 +1,7 @@
-﻿using PasantiasTW.Models;
-namespace PasantiasTW.Models
+﻿namespace PasantiasTW.Models
 
 {
-    public class EsudianteEmpresa
+    public class StudentCompany
     {
         public Guid StudentID { get; set; }
         public Student Student { get; set; } = default!;

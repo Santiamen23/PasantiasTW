@@ -7,7 +7,6 @@
         public string Address { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-
-        public ICollection<EsudianteEmpresa> StudentCompany { get; set; } = new List<EsudianteEmpresa>();
+        public ICollection<StudentCompany> StudentCompany { get; set; } = new List<StudentCompany>();
     }
 }
