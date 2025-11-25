@@ -11,11 +11,13 @@ namespace PasantiasTW.Data
         {
         }
         public DbSet<User> Users => Set<User>();
+        public DbSet<Tutor> Tutors => Set<Tutor>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<User>();
+            modelBuilder.Entity<Tutor>();
         }
     }
 }
