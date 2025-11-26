@@ -16,6 +16,7 @@ namespace PasantiasTW.Data
         public DbSet<Student> Students => Set<Student>();
         public DbSet<Company> Companies => Set<Company>();
         public DbSet<StudentCompany> StudentsCompanies => Set<StudentCompany>();
+        public DbSet<Practice> Practices => Set<Practice>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -41,6 +42,18 @@ namespace PasantiasTW.Data
                 .HasOne(ee => ee.Company)
                 .WithMany(comp => comp.StudentCompany)
                 .HasForeignKey(ee => ee.CompanyID);
+
+            modelBuilder.Entity<Practice>()
+                .HasOne(p => p.Student)                 
+                .WithMany(s => s.Practices)             
+                .HasForeignKey(p => p.StudentId)        
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Practice>()
+                .HasOne(p => p.Company)                
+                .WithMany(c => c.Practices)             
+                .HasForeignKey(p => p.CompanyId)       
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

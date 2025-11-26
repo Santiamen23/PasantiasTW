@@ -9,5 +9,6 @@
         public string Phone {  get; set; } = string.Empty;
 
         public ICollection<StudentCompany> StudentCompany = new List<StudentCompany>();
+        //public ICollection<Practice> Practices { get; set; } = new List<Practice>(); creo que se usara xd
     }
 }
