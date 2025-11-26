@@ -1,6 +1,6 @@
 namespace PasantiasTW.Models
 {
-    public class Student
+    public class Practice
     {
         public Guid PracticeId { get; set; }
         public Guid StudentId { get; set; }
