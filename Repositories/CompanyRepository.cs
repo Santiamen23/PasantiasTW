@@ -7,10 +7,12 @@ namespace PasantiasTW.Repositories
     public class CompanyRepository : ICompanyRepository
     {
         private readonly AppDbContext _db;
+
         public CompanyRepository(AppDbContext db)
         {
             _db = db;
         }
+
         public async Task Add(Company company)
         {
             await _db.Companies.AddAsync(company);
@@ -25,12 +27,22 @@ namespace PasantiasTW.Repositories
 
         public async Task<IEnumerable<Company>> GetAll()
         {
-            return await _db.Companies.ToListAsync();
+            return await _db.Companies
+                .Include(c => c.Tutor)                      
+                .Include(c => c.StudentCompany)            
+                    .ThenInclude(sc => sc.Student)         
+                .Include(c => c.Practices)                 
+                .ToListAsync();
         }
 
         public async Task<Company?> GetOne(Guid id)
         {
-            return await _db.Companies.FirstOrDefaultAsync(x => x.ID == id);
+            return await _db.Companies
+                .Include(c => c.Tutor)
+                .Include(c => c.StudentCompany)
+                    .ThenInclude(sc => sc.Student)
+                .Include(c => c.Practices)
+                .FirstOrDefaultAsync(x => x.ID == id);
         }
 
         public async Task Update(Company company)

@@ -17,7 +17,7 @@ namespace PasantiasTW.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -47,6 +47,36 @@ namespace PasantiasTW.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("PasantiasTW.Models.Practice", b =>
+                {
+                    b.Property<Guid>("PracticeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("PracticeId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Practices");
                 });
 
             modelBuilder.Entity("PasantiasTW.Models.Student", b =>
@@ -155,6 +185,25 @@ namespace PasantiasTW.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("PasantiasTW.Models.Practice", b =>
+                {
+                    b.HasOne("PasantiasTW.Models.Company", "Company")
+                        .WithMany("Practices")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PasantiasTW.Models.Student", "Student")
+                        .WithMany("Practices")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("PasantiasTW.Models.StudentCompany", b =>
                 {
                     b.HasOne("PasantiasTW.Models.Company", "Company")
@@ -187,6 +236,8 @@ namespace PasantiasTW.Migrations
 
             modelBuilder.Entity("PasantiasTW.Models.Company", b =>
                 {
+                    b.Navigation("Practices");
+
                     b.Navigation("StudentCompany");
 
                     b.Navigation("Tutor");
@@ -194,6 +245,8 @@ namespace PasantiasTW.Migrations
 
             modelBuilder.Entity("PasantiasTW.Models.Student", b =>
                 {
+                    b.Navigation("Practices");
+
                     b.Navigation("StudentCompany");
                 });
 #pragma warning restore 612, 618

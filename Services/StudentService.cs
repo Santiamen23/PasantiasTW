@@ -11,7 +11,18 @@ namespace PasantiasTW.Services
         {
             _repo = repo;
         }
-        public async Task<Student> CreateStudent(CreateStudentDto dto)
+        private StudentResponseDto MapToDto(Student student)
+        {
+            return new StudentResponseDto
+            {
+                Id=student.Id,
+                Name=student.Name,
+                Email=student.Email,
+                Carrera=student.Carrera,
+                Phone=student.Phone,
+            };
+        }
+        public async Task<StudentResponseDto> CreateStudent(CreateStudentDto dto)
         {
             var student = new Student
             {
@@ -22,29 +33,32 @@ namespace PasantiasTW.Services
                 Phone = dto.Phone,
             };
             await _repo.Add(student);
-            return student;
+            return MapToDto(student);
         }
 
         public async Task DeleteStudent(Guid id)
         {
-            Student? student = (await GetAll()).FirstOrDefault(x => x.Id == id);
+            var student = await _repo.GetOne(id);
             if (student == null) return;
             await _repo.Delete(student);
         }
 
-        public async Task<IEnumerable<Student>> GetAll()
+        public async Task<IEnumerable<StudentResponseDto>> GetAll()
         {
-            return await _repo.GetAll();
+            var students = await _repo.GetAll();
+            return students.Select(MapToDto).ToList();
         }
 
-        public async Task<Student> GetOne(Guid id)
+        public async Task<StudentResponseDto?> GetOne(Guid id)
         {
-            return await _repo.GetOne(id);
+            var student = await _repo.GetOne(id);
+            return student == null ? null : MapToDto(student);
         }
 
-        public async Task<Student> UpdateStudent(UpdateStudentDto dto, Guid id)
+        public async Task<StudentResponseDto> UpdateStudent(UpdateStudentDto dto, Guid id)
         {
-            Student? student = await GetOne(id);
+            var student = await _repo.GetOne(id);
+
             if (student == null) throw new Exception("student doesnt exist");
             student.Name = dto.Name;
             student.Email = dto.Email;
@@ -52,7 +66,7 @@ namespace PasantiasTW.Services
             student.Phone = dto.Phone;
 
             await _repo.Update(student);
-            return student;
+            return MapToDto(student);
         }
     }
 }

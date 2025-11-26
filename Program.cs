@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using PasantiasTW.Data;
 using PasantiasTW.Repositories;
+using PasantiasTW.Repositories.Interfaces;
 using PasantiasTW.Services;
 using System.Security.Claims;
 using System.Threading.RateLimiting;
@@ -137,6 +138,8 @@ builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<ICompanyService, CompanyServices>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IPracticeRepository, PracticeRepository>();
+builder.Services.AddScoped<IPracticeService, PracticeService>();
 builder.Services.AddDbContext<AppDbContext>(
     options=>
         options.UseNpgsql(connectionString));

@@ -17,17 +17,17 @@ namespace PasantiasTW.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCompanies()
+        public async Task<ActionResult<IEnumerable<CompanyResponseDto>>> GetAllCompanies()
         {
-            IEnumerable<Company> items = await _service.GetAll();
+            var items = await _service.GetAll();
             return Ok(items);
         }
         [HttpGet("{id:guid}")]
         [Authorize]
-        public async Task<IActionResult> GetOne(Guid id)
+        public async Task<ActionResult<CompanyResponseDto>> GetOne(Guid id)
         {
             var company = await _service.GetOne(id);
-            return Ok(company);
+            return company is null ? NotFound() : Ok(company);
         }
 
         [HttpPost]
@@ -36,16 +36,16 @@ namespace PasantiasTW.Controllers
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
             var company = await _service.CreateCompany(dto);
-            return CreatedAtAction(nameof(GetOne), new { id = company.ID }, company);
+            return CreatedAtAction(nameof(GetOne), new { id = company.CompanyId }, company);
         }
 
         [HttpPut("{id:guid}")]
         [Authorize]
-        public async Task<IActionResult> UpdateCompany([FromBody] UpdateCompanyDto dto, Guid id)
+        public async Task<ActionResult<CompanyResponseDto>> UpdateCompany([FromBody] UpdateCompanyDto dto, Guid id)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
-            var company = await _service.UpdateCompany(dto, id);
-            return CreatedAtAction(nameof(GetOne), new { id = company.ID }, company);
+            var updated = await _service.UpdateCompany(dto, id);
+            return Ok(updated);
         }
 
         [HttpDelete("{id:guid}")]
