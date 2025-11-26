@@ -2,15 +2,16 @@
 
 namespace PasantiasTW.Models.Dtos
 {
-    public record CreateTutorDto
+    public class ResponseTutorDto
     {
-        [Required,StringLength(200)]
+        public Guid Id { get; set; }
         public string Name { get; set; }
 
-        [Required,StringLength(15)]
         public string Phone { get; set; }
 
-        [Required]
+        public string Company { get; set; }
         public Guid CompanyId { get; set; }
+
+
     }
 }

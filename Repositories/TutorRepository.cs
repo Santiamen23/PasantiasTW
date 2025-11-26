@@ -26,12 +26,12 @@ namespace PasantiasTW.Repositories
 
         public async Task<IEnumerable<Tutor>> getAll()
         {
-            return await _context.Tutors.ToListAsync();
+            return await _context.Tutors.Include(t=>t.Company).ToListAsync();
         }
 
         public async Task<Tutor?> getById(Guid id)
         {
-            return await _context.Tutors.FirstOrDefaultAsync(t => t.id == id);
+            return await _context.Tutors.Include(t=>t.Company).FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task update(Tutor tutor)

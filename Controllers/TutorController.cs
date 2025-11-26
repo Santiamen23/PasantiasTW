@@ -34,7 +34,7 @@ namespace PasantiasTW.Controllers
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
             var tutor = await _service.create(dto);
-            return CreatedAtAction(nameof(GetTutorById), new { id = tutor.id }, tutor);
+            return CreatedAtAction(nameof(GetTutorById), new { id = tutor }, tutor);
         }
 
         [HttpPut("{id}")]

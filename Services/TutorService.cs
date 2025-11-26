@@ -1,25 +1,38 @@
 ﻿using PasantiasTW.Models;
 using PasantiasTW.Models.Dtos;
 using PasantiasTW.Repositories;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace PasantiasTW.Services
 {
     public class TutorService : ITutorService
     {
         private readonly ITutorRepository _repo;
-        public TutorService(ITutorRepository repo)
+        private readonly ICompanyRepository _companyRepository;
+        public TutorService(ITutorRepository repo,ICompanyRepository companyRepository)
         {
             _repo = repo;
+            _companyRepository = companyRepository;
         }
-        public async Task<Tutor> create(CreateTutorDto dto)
+        public async Task<ResponseTutorDto> create(CreateTutorDto dto)
         {
+            var company = await _companyRepository.GetOne(dto.CompanyId);
+            if (company is null) throw new Exception("Company not found");
             var tutor = new Tutor
             {
-                name = dto.name,
-                telephone = dto.telephone
+                Name = dto.Name,
+                Phone = dto.Phone, 
+                Company=company,
+                CompanyId =company.ID
             };
             await _repo.create(tutor);
-            return tutor;
+            return new ResponseTutorDto { 
+                Id= tutor.Id,
+                Name= dto.Name,
+                Phone=dto.Phone,
+                Company=company.Name,
+                CompanyId=company.ID
+            };
 
         }
 
@@ -30,24 +43,54 @@ namespace PasantiasTW.Services
             await _repo.delete(delete);
         }
 
-        public async Task<IEnumerable<Tutor>> getAll()
+        public async Task<IEnumerable<ResponseTutorDto>> getAll()
         {
-            return await _repo.getAll();
+            var tutorsEntities = await _repo.getAll();
+            var tutorsDtos = tutorsEntities.Select(t => new ResponseTutorDto
+            {
+                Id = t.Id,
+                Name = t.Name,
+                Phone = t.Phone,
+                CompanyId = t.CompanyId,
+                Company = t.Company.Name
+            }).ToList();
+
+            return tutorsDtos;
         }
 
-        public async Task<Tutor?> getById(Guid id)
+        public async Task<ResponseTutorDto?> getById(Guid id)
         {
-            return await _repo.getById(id);
+            var tutor=await _repo.getById(id);
+            if (tutor == null) return null;
+            return new ResponseTutorDto
+            {
+                Id = tutor.Id,
+                Name = tutor.Name,
+                Phone = tutor.Phone,
+                Company = tutor.Company.Name,
+                CompanyId = tutor.CompanyId
+            };
         }
 
-        public async Task<Tutor> update(Guid id, UpdateTutorDto dto)
+        public async Task<ResponseTutorDto> update(Guid id, UpdateTutorDto dto)
         {
             Tutor? tutor = await _repo.getById(id);
             if (tutor == null) throw new Exception("Tutor not found");
-            tutor.name = dto.name;
-            tutor.telephone = dto.telephone;
+            var company = await _companyRepository.GetOne(tutor.CompanyId);
+            if (company is null) throw new Exception("Company not found");
+            tutor.Name = dto.Name;
+            tutor.Phone = dto.Phone;
+            tutor.CompanyId = dto.CompanyId;
+            tutor.Company = company;
             await _repo.update(tutor);
-            return tutor;
+            return new ResponseTutorDto
+            {
+                Id = tutor.Id,
+                Name = tutor.Name,
+                Phone = tutor.Phone,
+                Company = company.Name,
+                CompanyId = company.ID
+            };
         }
     }
 }

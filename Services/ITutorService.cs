@@ -5,10 +5,10 @@ namespace PasantiasTW.Services
 {
     public interface ITutorService
     {
-        Task <IEnumerable<Tutor>> getAll();
-        Task<Tutor> getById(Guid id);
-        Task<Tutor>create(CreateTutorDto dto );
-        Task<Tutor> update(Guid id, UpdateTutorDto dto);
+        Task <IEnumerable<ResponseTutorDto>> getAll();
+        Task<ResponseTutorDto> getById(Guid id);
+        Task<ResponseTutorDto>create(CreateTutorDto dto );
+        Task<ResponseTutorDto> update(Guid id, UpdateTutorDto dto);
         Task delete(Guid id);
     }
 }

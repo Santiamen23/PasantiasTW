@@ -22,6 +22,13 @@ namespace PasantiasTW.Data
             modelBuilder.Entity<User>();
             modelBuilder.Entity<Tutor>();
 
+            modelBuilder.Entity<Company>()
+                .HasOne(c => c.Tutor)         
+                .WithOne(t => t.Company)      
+                .HasForeignKey<Tutor>(t => t.CompanyId);
+
+            modelBuilder.Entity<Student>();
+
             modelBuilder.Entity<StudentCompany>()
                 .HasKey(ee => new { ee.StudentID, ee.CompanyID });
 
