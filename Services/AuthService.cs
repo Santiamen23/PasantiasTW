@@ -57,7 +57,10 @@ namespace PasantiasTW.Services
             public async Task<string> register(RegisterDto dto)
             {
                 var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-                var user = new User
+                if(dto.Role!=null && dto.Role.ToLower() != "admin" && dto.Role.ToLower() != "user") throw new Exception("Role must be either 'admin' or 'user'.");
+                if(dto.Role.ToLower() == "admin") dto.Role = "Admin";
+                if(dto.Role.ToLower() == "user") dto.Role = "User";
+            var user = new User
                 {
                     Email = dto.Email,
                     PasswordHash = hashedPassword,
