@@ -1,4 +1,21 @@
 services:
+  api:
+    build: .
+    container_name: internship_api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - JWT_KEY=WkQzsPW9gQn/q0niJ2F8GtYrQv1GiHTSDRDu8EReQhY=
+      - JWT_ISSUER=MiApi
+      - JWT_AUDIENCE=MiCliente
+      - POSTGRES_DB=internshipdb
+      - POSTGRES_HOST=db  
+      - POSTGRES_USER=internshipuser
+      - POSTGRES_PASSWORD=supersecret
+    depends_on:
+      db:
+        condition: service_healthy
   db:
     image: postgres:16
     container_name: internship_pg

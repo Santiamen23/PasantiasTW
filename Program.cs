@@ -128,7 +128,9 @@ else if (string.IsNullOrEmpty(connectionString))
     connectionString = $"Host={dbHost};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPass}";
 }
 
-
+builder.Services.AddDbContext<AppDbContext>(
+    options=>
+        options.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -140,11 +142,14 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IPracticeRepository, PracticeRepository>();
 builder.Services.AddScoped<IPracticeService, PracticeService>();
-builder.Services.AddDbContext<AppDbContext>(
-    options=>
-        options.UseNpgsql(connectionString));
+
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.Migrate();
+}
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

@@ -27,7 +27,9 @@ namespace PasantiasTW.Services
                     {
                         Id = company.Tutor.Id,
                         Name = company.Tutor.Name,
-                        Phone = company.Tutor.Phone
+                        Phone = company.Tutor.Phone,
+                        Company= company.Name,
+                        CompanyId= company.ID
                     },
 
                 Students = company.StudentCompany?
