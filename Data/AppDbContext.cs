@@ -47,7 +47,7 @@ namespace PasantiasTW.Data
                 .HasOne(p => p.Student)                 
                 .WithMany(s => s.Practices)             
                 .HasForeignKey(p => p.StudentId)        
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade); //restrict por cascade pa que cuando se elimine un estudiante se eliminen sus practicas aunq no se si se usa
 
             modelBuilder.Entity<Practice>()
                 .HasOne(p => p.Company)                
