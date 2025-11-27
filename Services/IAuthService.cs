@@ -1,4 +1,4 @@
-﻿using PasantiasTW.Models.Dtos;
+﻿using PasantiasTW.Models.Dtos.User;
 
 namespace PasantiasTW.Services
 {

@@ -1,5 +1,5 @@
 ﻿using PasantiasTW.Models;
-using PasantiasTW.Models.Dtos;
+using PasantiasTW.Models.Dtos.Tutor;
 using PasantiasTW.Repositories;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 

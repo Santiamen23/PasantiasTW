@@ -1,4 +1,4 @@
-﻿namespace PasantiasTW.Models.Dtos
+﻿namespace PasantiasTW.Models.Dtos.Company
 {
     public record UpdateCompanyDto
     {

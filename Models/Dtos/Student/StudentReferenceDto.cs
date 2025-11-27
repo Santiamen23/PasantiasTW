@@ -1,4 +1,4 @@
-﻿namespace PasantiasTW.Models.Dtos
+﻿namespace PasantiasTW.Models.Dtos.Student
 {
     public record StudentReferenceDto
     {

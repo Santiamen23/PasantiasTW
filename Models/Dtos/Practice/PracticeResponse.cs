@@ -1,4 +1,7 @@
-namespace PasantiasTW.Models.Dtos
+using PasantiasTW.Models.Dtos.Company;
+using PasantiasTW.Models.Dtos.Student;
+
+namespace PasantiasTW.Models.Dtos.Practice
 {
     public record PracticeResponseDto
     {

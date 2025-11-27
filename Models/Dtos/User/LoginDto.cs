@@ -1,4 +1,4 @@
-﻿namespace PasantiasTW.Models.Dtos
+﻿namespace PasantiasTW.Models.Dtos.User
 {
     public class LoginDto
     {

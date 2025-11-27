@@ -1,5 +1,5 @@
 ﻿using PasantiasTW.Models;
-using PasantiasTW.Models.Dtos;
+using PasantiasTW.Models.Dtos.Student;
 
 namespace PasantiasTW.Services
 {

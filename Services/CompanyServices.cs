@@ -1,5 +1,9 @@
 ﻿using PasantiasTW.Models;
 using PasantiasTW.Models.Dtos;
+using PasantiasTW.Models.Dtos.Company;
+using PasantiasTW.Models.Dtos.Practice;
+using PasantiasTW.Models.Dtos.Student;
+using PasantiasTW.Models.Dtos.Tutor;
 using PasantiasTW.Repositories;
 
 namespace PasantiasTW.Services

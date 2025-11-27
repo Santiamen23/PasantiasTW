@@ -1,4 +1,4 @@
-using PasantiasTW.Models.Dtos;
+using PasantiasTW.Models.Dtos.Practice;
 
 namespace PasantiasTW.Services
 {

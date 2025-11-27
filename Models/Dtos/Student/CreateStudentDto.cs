@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PasantiasTW.Models.Dtos
+namespace PasantiasTW.Models.Dtos.Student
 {
     public record CreateStudentDto
     {

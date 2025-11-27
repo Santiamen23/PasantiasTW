@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PasantiasTW.Models.Dtos;
+using PasantiasTW.Models.Dtos.User;
 using PasantiasTW.Services;
 
 namespace PasantiasTW.Controllers

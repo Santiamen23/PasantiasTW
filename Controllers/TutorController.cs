@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PasantiasTW.Models.Dtos;
+using PasantiasTW.Models.Dtos.Tutor;
 using PasantiasTW.Services;
 
 namespace PasantiasTW.Controllers

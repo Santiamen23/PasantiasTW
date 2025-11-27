@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace PasantiasTW.Models.Dtos
+namespace PasantiasTW.Models.Dtos.Company
 {
     public record CreateCompanyDto
     {

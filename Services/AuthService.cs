@@ -5,8 +5,8 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using PasantiasTW.Models;
-using PasantiasTW.Models.Dtos;
 using PasantiasTW.Repositories;
+using PasantiasTW.Models.Dtos.User;
 
 namespace PasantiasTW.Services
 {
