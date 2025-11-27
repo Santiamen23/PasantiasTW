@@ -10,6 +10,6 @@
 
         public Tutor? Tutor { get; set; }
         public ICollection<StudentCompany> StudentCompany { get; set; } = new List<StudentCompany>();
-        //public ICollection<Practice> Practices { get; set; } = new List<Practice>(); igual creo que se usara
+        public ICollection<Practice> Practices { get; set; } = new List<Practice>();
     }
 }

@@ -11,7 +11,44 @@ namespace PasantiasTW.Services
         {
             _repo = repo;
         }
-        public async Task<Company> CreateCompany(CreateCompanyDto dto)
+        private CompanyResponseDto MapToDto(Company company)
+        {
+            return new CompanyResponseDto
+            {
+                CompanyId = company.ID,
+                Name = company.Name,
+                Address = company.Address,
+                Phone = company.Phone,
+                Email = company.Email,
+
+                Tutor = company.Tutor is null
+                    ? null
+                    : new ResponseTutorDto
+                    {
+                        Id = company.Tutor.Id,
+                        Name = company.Tutor.Name,
+                        Phone = company.Tutor.Phone
+                    },
+
+                Students = company.StudentCompany?
+                    .Select(sc => new StudentReferenceDto
+                    {
+                        StudentId = sc.Student.Id,
+                        Name = sc.Student.Name,
+                        Career = sc.Student.Carrera
+                    }),
+
+                Practices = company.Practices?
+                    .Select(p => new PracticeBriefDto
+                    {
+                        PracticeId = p.PracticeId,
+                        Status = p.Status,
+                        StartDate = p.StartDate,
+                        EndDate = p.EndDate
+                    })
+            };
+        }
+        public async Task<CompanyResponseDto> CreateCompany(CreateCompanyDto dto)
         {
             var company = new Company
             {
@@ -22,37 +59,40 @@ namespace PasantiasTW.Services
                 Email = dto.Email
             };
             await _repo.Add(company);
-            return company;
+            return MapToDto(company);
         }
 
         public async Task DeleteCompany(Guid id)
         {
-            Company? company = (await GetAll()).FirstOrDefault(x => x.ID == id);
+            var company = await _repo.GetOne(id);
             if (company == null) return;
             await _repo.Delete(company);
         }
 
-        public async Task<IEnumerable<Company>> GetAll()
+        public async Task<IEnumerable<CompanyResponseDto>> GetAll()
         {
-            return await _repo.GetAll();
+            var companies = await _repo.GetAll();
+            return companies.Select(MapToDto);
         }
 
-        public async Task<Company> GetOne(Guid id)
+        public async Task<CompanyResponseDto?> GetOne(Guid id)
         {
-            return await _repo.GetOne(id);
+            var company = await _repo.GetOne(id);
+            return company is null ? null : MapToDto(company);
         }
 
-        public async Task<Company> UpdateCompany(UpdateCompanyDto dto, Guid id)
+        public async Task<CompanyResponseDto> UpdateCompany(UpdateCompanyDto dto, Guid id)
         {
-            Company? company = await GetOne(id);
+            var company = await _repo.GetOne(id);
             if (company == null) throw new Exception("company doesnt exist");
+            
             company.Name = dto.Name;
             company.Address = dto.Address;
             company.Phone = dto.Phone;
             company.Email = dto.Email;
 
             await _repo.Update(company);
-            return company;
+            return MapToDto(company);
         }
     }
 }

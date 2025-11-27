@@ -17,34 +17,34 @@ namespace PasantiasTW.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllStudents()
+        public async Task<ActionResult<IEnumerable<StudentResponseDto>>> GetAllStudents()
         {
-            IEnumerable<Student> items = await _service.GetAll();
+            var items = await _service.GetAll();
             return Ok(items);
         }
         [HttpGet("{id:guid}")]
         [Authorize]
-        public async Task<IActionResult> GetOne(Guid id)
+        public async Task<ActionResult<StudentResponseDto>> GetOne(Guid id)
         {
             var student = await _service.GetOne(id);
-            return Ok(student);
+            return student is null ? NotFound() : Ok(student);
         }
 
         [HttpPost]
         [Authorize(Policy = "AdminOnly")]
-        public async Task<IActionResult> CreateStudent([FromBody] CreateStudentDto dto)
+        public async Task<ActionResult<StudentResponseDto>> CreateStudent([FromBody] CreateStudentDto dto)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
-            var hospital = await _service.CreateStudent(dto);
-            return CreatedAtAction(nameof(GetOne), new { id = hospital.Id }, hospital);
+            var student = await _service.CreateStudent(dto);
+            return CreatedAtAction(nameof(GetOne), new { id = student.Id }, student);
         }
         [HttpPut("{id:guid}")]
         [Authorize]
-        public async Task<IActionResult> UpdateStudent([FromBody] UpdateStudentDto dto, Guid id)
+        public async Task<ActionResult<StudentResponseDto>> UpdateStudent([FromBody] UpdateStudentDto dto, Guid id)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
-            var student = await _service.UpdateStudent(dto, id);
-            return CreatedAtAction(nameof(GetOne), new { id = student.Id }, student);
+            var update = await _service.UpdateStudent(dto, id);
+            return Ok(update);
         }
 
         [HttpDelete("{id:guid}")]

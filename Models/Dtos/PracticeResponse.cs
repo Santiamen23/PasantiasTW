@@ -6,9 +6,10 @@ namespace PasantiasTW.Models.Dtos
 
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public string Status { get; set; } = string.Empty;
+        public string Practice  { get; set; } = string.Empty;
+        public PracticeStatus Status { get; set; }
 
-        /*public StudentReferenceDto Student { get; set; } = default!;
-        public CompanyReferenceDto Company { get; set; } = default!; no se si las crearan xd, pero por si acaso*/
+        public StudentReferenceDto Student { get; set; } = default!;
+        public CompanyReferenceDto Company { get; set; } = default!;
     }
 }

@@ -1,6 +1,7 @@
 using PasantiasTW.Models;
 using PasantiasTW.Models.Dtos;
-using PasantiasTW.Repositories.Services;
+using PasantiasTW.Repositories;
+using PasantiasTW.Repositories.Interfaces;
 
 namespace PasantiasTW.Services
 {
@@ -30,9 +31,9 @@ namespace PasantiasTW.Services
                 Status = practice.Status,
                 Student = new StudentReferenceDto 
                 {
-                    StudentId = practice.Student.ID,
+                    StudentId = practice.Student.Id,
                     Name = practice.Student.Name,
-                    Career = practice.Student.Career 
+                    Career = practice.Student.Carrera
                 },
                 Company = new CompanyReferenceDto
                 {
@@ -55,7 +56,7 @@ namespace PasantiasTW.Services
                 StudentId = dto.StudentId,
                 CompanyId = dto.CompanyId,
                 StartDate = dto.StartDate,
-                Status = dto.Status ?? "Pending", 
+                Status = dto.Status ?? PracticeStatus.Pending, 
                 Student = student, 
                 Company = company 
             };

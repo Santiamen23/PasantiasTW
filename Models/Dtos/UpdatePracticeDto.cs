@@ -7,6 +7,6 @@ namespace PasantiasTW.Models.Dtos
         public DateTime? EndDate { get; set; }
         [Required]
         [StringLength(50)]
-        public PracticeStatus Status { get; set; };
+        public PracticeStatus Status { get; set; }
     }
 }

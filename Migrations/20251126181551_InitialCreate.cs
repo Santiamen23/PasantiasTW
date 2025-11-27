@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PasantiasTW.Migrations
 {
     /// <inheritdoc />
-    public partial class firstMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -81,6 +81,34 @@ namespace PasantiasTW.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Practices",
+                columns: table => new
+                {
+                    PracticeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Practices", x => x.PracticeId);
+                    table.ForeignKey(
+                        name: "FK_Practices_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Practices_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StudentsCompanies",
                 columns: table => new
                 {
@@ -105,6 +133,16 @@ namespace PasantiasTW.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Practices_CompanyId",
+                table: "Practices",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Practices_StudentId",
+                table: "Practices",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StudentsCompanies_CompanyID",
                 table: "StudentsCompanies",
                 column: "CompanyID");
@@ -119,6 +157,9 @@ namespace PasantiasTW.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Practices");
+
             migrationBuilder.DropTable(
                 name: "StudentsCompanies");
 

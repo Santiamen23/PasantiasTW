@@ -16,7 +16,7 @@ namespace PasantiasTW.Models
         public DateTime? EndDate { get; set; }
         public PracticeStatus Status { get; set; } = PracticeStatus.Pending;
 
-        public Company Company { get; set; } = default;
-        public Student Student { get; set; }
+        public Company Company { get; set; } = default!;
+        public Student Student { get; set; } = default!;
     }
 }

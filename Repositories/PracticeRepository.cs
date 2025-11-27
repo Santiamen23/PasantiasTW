@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PasantiasTW.Data;
 using PasantiasTW.Models;
 using PasantiasTW.Repositories;
+using PasantiasTW.Repositories.Interfaces;
 
 namespace PasantiasTW.Repositories
 {
@@ -17,6 +18,19 @@ namespace PasantiasTW.Repositories
         public async Task Create(Practice practice)
         {
             await _context.Practices.AddAsync(practice);
+            bool exists = await _context.StudentsCompanies
+                .AnyAsync(sc =>
+                    sc.StudentID == practice.StudentId &&
+                    sc.CompanyID == practice.CompanyId);
+            if (!exists)
+            {
+                var sc = new StudentCompany
+                {
+                    StudentID = practice.StudentId,
+                    CompanyID = practice.CompanyId
+                };
+                await _context.StudentsCompanies.AddAsync(sc);
+            }
             await _context.SaveChangesAsync();
         }
 
