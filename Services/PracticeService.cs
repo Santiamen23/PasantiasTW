@@ -55,7 +55,6 @@ namespace PasantiasTW.Services
             {
                 StudentId = dto.StudentId,
                 CompanyId = dto.CompanyId,
-                StartDate = dto.StartDate,
                 Status = dto.Status ?? PracticeStatus.Pending, 
                 Student = student, 
                 Company = company 

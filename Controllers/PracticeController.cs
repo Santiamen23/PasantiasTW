@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PasantiasTW.Models.Dtos;
 using PasantiasTW.Services;
@@ -16,6 +17,7 @@ namespace PasantiasTW.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllPractices()
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
@@ -23,6 +25,7 @@ namespace PasantiasTW.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetPracticeById(Guid id)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
@@ -31,6 +34,7 @@ namespace PasantiasTW.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> CreatePractice([FromBody] CreatePracticeDto dto)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
@@ -39,6 +43,7 @@ namespace PasantiasTW.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> UpdatePractice(Guid id, [FromBody] UpdatePracticeDto dto)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
@@ -47,6 +52,7 @@ namespace PasantiasTW.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeletePractice(Guid id)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);

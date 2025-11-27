@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PasantiasTW.Models.Dtos;
 using PasantiasTW.Services;
 
@@ -16,12 +17,14 @@ namespace PasantiasTW.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllTutors()
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
             return Ok(await _service.getAll());
         }
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetTutorById(Guid id)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
@@ -30,6 +33,7 @@ namespace PasantiasTW.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> CreateTutor([FromBody] CreateTutorDto dto)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
@@ -38,6 +42,7 @@ namespace PasantiasTW.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> UpdateTutor(Guid id, [FromBody] UpdateTutorDto dto)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
@@ -46,6 +51,7 @@ namespace PasantiasTW.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteTutor(Guid id)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);

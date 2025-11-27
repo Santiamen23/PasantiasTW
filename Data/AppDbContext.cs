@@ -26,7 +26,7 @@ namespace PasantiasTW.Data
             modelBuilder.Entity<Company>()
                 .HasOne(c => c.Tutor)         
                 .WithOne(t => t.Company)      
-                .HasForeignKey<Tutor>(t => t.CompanyId);
+                .HasForeignKey<Tutor>(t => t.CompanyId).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Student>();
 
@@ -47,13 +47,13 @@ namespace PasantiasTW.Data
                 .HasOne(p => p.Student)                 
                 .WithMany(s => s.Practices)             
                 .HasForeignKey(p => p.StudentId)        
-                .OnDelete(DeleteBehavior.Cascade); //restrict por cascade pa que cuando se elimine un estudiante se eliminen sus practicas aunq no se si se usa
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Practice>()
                 .HasOne(p => p.Company)                
                 .WithMany(c => c.Practices)             
                 .HasForeignKey(p => p.CompanyId)       
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
