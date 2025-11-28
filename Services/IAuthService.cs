@@ -8,5 +8,6 @@ namespace PasantiasTW.Services
         Task<(bool ok, LoginResponseDto? response)> login(LoginDto dto);
 
         Task<(bool ok, LoginResponseDto? response)> refresh(RefreshRequestDto dto);
+        Task<bool> LogoutAsync(string userId);
     }
 }

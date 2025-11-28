@@ -148,5 +148,19 @@ namespace PasantiasTW.Services
                 return Base64UrlEncoder.Encode(bytes);
             }
 
+        public async Task<bool> LogoutAsync(string userId)
+        {
+            if (!Guid.TryParse(userId, out var id))
+            {
+                return false;
+            }
+            var user = await _users.getById(id);
+            if (user == null) return false;
+            user.RefreshToken = null;
+            user.RefreshTokenRevokedAt = DateTime.UtcNow;
+            await _users.UpdateAsync(user);
+            return true;
+        }
+
     }
 }

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PasantiasTW.Models.Dtos.User;
 using PasantiasTW.Services;
+using System.Security.Claims;
 
 namespace PasantiasTW.Controllers
 {
@@ -34,6 +36,24 @@ namespace PasantiasTW.Controllers
             var (ok, response) = await _service.refresh(dto);
             if (!ok || response is null) return Unauthorized();
             return Ok(response);
+        }
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var ok = await _service.LogoutAsync(userId);
+            if (!ok) return BadRequest("Logout failed");
+
+            return Ok();
         }
     }
 }

@@ -8,5 +8,6 @@ namespace PasantiasTW.Repositories
         Task<User?> GetByRefreshToken(string refreshToken);
         Task AddAsync(User user);
         Task UpdateAsync(User user);
+        Task<User?> getById(Guid id);
     }
 }
