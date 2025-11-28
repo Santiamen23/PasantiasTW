@@ -27,7 +27,7 @@ namespace PasantiasTW.Controllers
         public async Task<ActionResult<CompanyResponseDto>> GetOne(Guid id)
         {
             var company = await _service.GetOne(id);
-            return company is null ? NotFound() : Ok(company);
+            return company is null ? NotFound(new { error = "Company not found", code = 404 }) : Ok(company);
         }
 
         [HttpPost]

@@ -28,7 +28,7 @@ namespace PasantiasTW.Controllers
         public async Task<ActionResult<StudentResponseDto>> GetOne(Guid id)
         {
             var student = await _service.GetOne(id);
-            return student is null ? NotFound() : Ok(student);
+            return student is null ? NotFound(new { error = "Student not found", code = 404 }) : Ok(student);
         }
 
         [HttpPost]
