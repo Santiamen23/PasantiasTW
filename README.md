@@ -185,7 +185,7 @@ The system implements a **TimeGate (Rate Limiter)** configured in `Program.cs` t
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/YOUR_USER/PasantiasTW.git](https://github.com/YOUR_USER/PasantiasTW.git)
+    git clone [https://github.com/YOUR_USER/PasantiasTW](https://github.com/YOUR_USER/PasantiasTW.git)
     cd PasantiasTW
     ```
 
@@ -217,8 +217,7 @@ The system implements a **TimeGate (Rate Limiter)** configured in `Program.cs` t
     ```bash
     dotnet run
     ```
-
-The API will be available at the port indicated in the console.
+#### The API will be available at the port indicated in the console.
 ---
 ## 🧪 Testing with Postman
 
