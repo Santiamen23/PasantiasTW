@@ -10,7 +10,7 @@ This API facilitates the administrative and operational flow of this tripartite 
 3.  **The Student:** Who executes the internship.
 
 **Key Features:**
-* **Centralized Management:** CRUD operations for Students, Companies, and Tutors.
+* **Centralized Management:** CRUD operations for Students, Companies, and Tutors and Practices.
 * **Practice Tracking:** Manages the lifecycle of an internship (Pending, Active, Finished).
 * **Role-Based Security:** strict separation between Administrators and regular Users.
 * **Scalable Architecture:** Built on .NET with a solid Entity Framework Core foundation.
@@ -126,53 +126,6 @@ The API handles two strict roles defined upon user creation:
 
 ---
 
-## 📊 Entity-Relationship Diagram (ERD)
-
-The following diagram illustrates the data model and relationships between entities in the PostgreSQL database:
-Note: Relationships handle cascade deletions where appropriate (e.g., deleting a Company removes its associated Practices).
-
-```mermaid
-erDiagram
-    USER {
-        Guid Id
-        string Username
-        string Email
-        string Password
-        string Role
-    }
-    STUDENT {
-        Guid Id
-        string Name
-        string Email
-        string Career
-        string Phone
-    }
-    COMPANY {
-        Guid Id
-        string Name
-        string Address
-        string Phone
-        string Email
-    }
-    TUTOR {
-        Guid Id
-        string Name
-        string Phone
-        Guid CompanyId
-    }
-    PRACTICE {
-        Guid PracticeId
-        DateTime StartDate
-        DateTime EndDate
-        Enum Status
-        Guid StudentId
-        Guid CompanyId
-    }
-
-    COMPANY ||--|{ TUTOR : "employs"
-    COMPANY ||--|{ PRACTICE : "offers"
-    STUDENT ||--|{ PRACTICE : "performs"
-```
 ## ⏱️ TimeGate (Rate Limiting)
 
 The system implements a **TimeGate (Rate Limiter)** configured in `Program.cs` to protect the API against abuse and Denial of Service (DoS) attacks.
@@ -302,7 +255,7 @@ It is recommended to follow this specific order to test the complete functionali
 ```
 ---
 ## 📄 Response Examples
-### Login Response (200 OK)
+### 1. Login Response (200 OK)
 ```json
 {
     "user": {
@@ -317,7 +270,7 @@ It is recommended to follow this specific order to test the complete functionali
     "expiresIn": 3600
 }
 ```
-### Company Response (201 CREATED, 200 OK)
+### 2. Company Response (201 CREATED, 200 OK)
 ```json
 {
     "companyId": "a2b45f64-5717-4562-b3fc-2c963f66afa1",
@@ -351,7 +304,7 @@ It is recommended to follow this specific order to test the complete functionali
     ]
 }
 ```
-### Tutor Response (201 CREATED, 200 OK)
+### 3. Tutor Response (201 CREATED, 200 OK)
 ```json
 {
     "id": "b1b2c3d4-e5f6-7890-1234-567890abcdef",
@@ -361,7 +314,7 @@ It is recommended to follow this specific order to test the complete functionali
     "companyId": "a2b45f64-5717-4562-b3fc-2c963f66afa1"
 }
 ```
-### Student Response (201 CREATED, 200 OK)
+### 4. Student Response (201 CREATED, 200 OK)
 ```json
 {
     "id": "1d638759-160e-4052-bd9b-10c60590633a",
@@ -371,7 +324,7 @@ It is recommended to follow this specific order to test the complete functionali
     "phone": "78842256"
 }
 ```
-### Practice Response (201 CREATED,200 OK)
+### 5. Practice Response (201 CREATED,200 OK)
 ```json
 {
     "practiceId": "3beaf7ed-722c-4b71-8aef-d0c9e98c0374",
@@ -388,4 +341,53 @@ It is recommended to follow this specific order to test the complete functionali
         "name": "TechCorp Bolivia"
     }
 }
+```
+---
+
+## 📊 Entity-Relationship Diagram (ERD)
+
+The following diagram illustrates the data model and relationships between entities in the PostgreSQL database:
+Note: Relationships handle cascade deletions where appropriate (e.g., deleting a Company removes its associated Practices).
+
+```mermaid
+erDiagram
+    USER {
+        Guid Id
+        string Username
+        string Email
+        string Password
+        string Role
+    }
+    STUDENT {
+        Guid Id
+        string Name
+        string Email
+        string Career
+        string Phone
+    }
+    COMPANY {
+        Guid Id
+        string Name
+        string Address
+        string Phone
+        string Email
+    }
+    TUTOR {
+        Guid Id
+        string Name
+        string Phone
+        Guid CompanyId
+    }
+    PRACTICE {
+        Guid PracticeId
+        DateTime StartDate
+        DateTime EndDate
+        Enum Status
+        Guid StudentId
+        Guid CompanyId
+    }
+
+    COMPANY ||--|{ TUTOR : "employs"
+    COMPANY ||--|{ PRACTICE : "offers"
+    STUDENT ||--|{ PRACTICE : "performs"
 ```
