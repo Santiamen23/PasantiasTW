@@ -41,7 +41,7 @@ namespace PasantiasTW.Services
                     {
                         StudentId = sc.Student.Id,
                         Name = sc.Student.Name,
-                        Career = sc.Student.Carrera
+                        Career = sc.Student.Career
                     }),
 
                 Practices = company.Practices?

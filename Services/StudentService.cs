@@ -18,7 +18,7 @@ namespace PasantiasTW.Services
                 Id=student.Id,
                 Name=student.Name,
                 Email=student.Email,
-                Carrera=student.Carrera,
+                Career = student.Career,
                 Phone=student.Phone,
             };
         }
@@ -29,7 +29,7 @@ namespace PasantiasTW.Services
                 Id = Guid.NewGuid(),
                 Name = dto.Name,
                 Email = dto.Email,
-                Carrera = dto.Carrera,
+                Career = dto.Career,
                 Phone = dto.Phone,
             };
             await _repo.Add(student);
@@ -62,7 +62,7 @@ namespace PasantiasTW.Services
             if (student == null) throw new Exception("student doesnt exist");
             student.Name = dto.Name;
             student.Email = dto.Email;
-            student.Carrera = dto.Carrera;
+            student.Career = dto.Career;
             student.Phone = dto.Phone;
 
             await _repo.Update(student);
