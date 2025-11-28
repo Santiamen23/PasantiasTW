@@ -14,7 +14,15 @@ This API facilitates the administrative and operational flow of this tripartite 
 * **Practice Tracking:** Manages the lifecycle of an internship (Pending, Active, Finished).
 * **Role-Based Security:** strict separation between Administrators and regular Users.
 * **Scalable Architecture:** Built on .NET with a solid Entity Framework Core foundation.
+---
+## 🏗️ Software Architecture
 
+The system follows a **Layered Architecture** utilizing the **Repository Pattern**, which ensures clean, maintainable, and decoupled code:
+
+* **Controllers:** Handle incoming HTTP requests.
+* **Services:** Contain business logic and validations.
+* **Repositories:** Manage direct data access using Entity Framework Core.
+* **Data/Models:** Definition of entities and database context.
 ---
 ## 🚀 Live Demo & Documentation
 
