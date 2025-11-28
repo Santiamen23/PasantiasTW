@@ -8,6 +8,8 @@ namespace PasantiasTW.Models.Dtos.Practice
         public Guid StudentId { get; set; }
         [Required]
         public Guid CompanyId { get; set; }
-        public PracticeStatus? Status { get; set; }
+        [Required]
+        public DateTime StartDate { get; set; }
+        public string? Status { get; set; }
     }
 }

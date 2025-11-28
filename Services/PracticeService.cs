@@ -24,6 +24,17 @@ namespace PasantiasTW.Services
             _companyRepository = companyRepository;
         }
 
+        private PracticeStatus ParseStatusOrDefault(string? statusStr, PracticeStatus defaultValue)
+        {
+            if (string.IsNullOrWhiteSpace(statusStr))
+                return defaultValue;
+
+            if (statusStr == "Pending") { return PracticeStatus.Pending; }
+            else if (statusStr == "Active") { return PracticeStatus.Active; }
+            else if (statusStr == "Finished") { return PracticeStatus.Finished; }
+                throw new ArgumentException($"Invalid Practice status value: '{statusStr}'");
+        }
+
         private PracticeResponseDto MapToDto(Practice practice)
         {
             return new PracticeResponseDto
@@ -54,11 +65,14 @@ namespace PasantiasTW.Services
             var company = await _companyRepository.GetOne(dto.CompanyId);
             if (company is null) throw new Exception("Company not found");
 
+            var parsedStatus = ParseStatusOrDefault(dto.Status, PracticeStatus.Pending);
+
             var practice = new Practice
             {
                 StudentId = dto.StudentId,
                 CompanyId = dto.CompanyId,
-                Status = dto.Status ?? PracticeStatus.Pending, 
+                StartDate = dto.StartDate,
+                Status = parsedStatus,
                 Student = student, 
                 Company = company 
             };
@@ -94,7 +108,7 @@ namespace PasantiasTW.Services
             if (practice == null) return null;
 
             practice.EndDate = dto.EndDate;
-            practice.Status = dto.Status;
+            practice.Status = ParseStatusOrDefault(dto.Status, practice.Status);
 
             await _repo.Update(practice);
             return MapToDto(practice);
