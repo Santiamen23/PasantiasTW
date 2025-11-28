@@ -168,9 +168,10 @@ erDiagram
 
 The system implements a **TimeGate (Rate Limiter)** configured in `Program.cs` to protect the API against abuse and Denial of Service (DoS) attacks.
 
-* **Configuration:** FixedWindow.
-* **Limit:** Maximum **10 requests every 10 seconds** per client.
-* **Exceeded Response:** The server will respond with a `429 Too Many Requests` status code.
+* **Configuration:** FixedWindow ("Fixed").
+* **Limit:** Maximum **10 requests per minute**.
+* **Queue Limit:** Allows up to **3 requests** to be queued if the limit is reached.
+* **Exceeded Response:** The server will respond with a rejection status code (typically `503 Service Unavailable` or `429 Too Many Requests` depending on final configuration) when the limit and queue are exhausted.
 
 ---
 
