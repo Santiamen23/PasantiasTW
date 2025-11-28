@@ -78,6 +78,7 @@ The API handles two strict roles defined upon user creation:
 | `POST` | `/api/Auth/register` | Register a new user (User/Admin). | 🔓 Public |
 | `POST` | `/api/Auth/login` | Log in and obtain Access/Refresh Tokens. | 🔓 Public |
 | `POST` | `/api/Auth/refresh` | Renew Access Token using a Refresh Token. | 🔓 Public |
+| `POST` | `/api/Auth/logout` | Log out and delete Refresh Token from database. | 🔐 Auth |
 
 ### 🎓 Student
 | Method | Endpoint | Description | Auth |
@@ -91,7 +92,7 @@ The API handles two strict roles defined upon user creation:
 ### 🏢 Company
 | Method | Endpoint | Description | Auth |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/Company` | List all companies. | 🔓 Public |
+| `GET` | `/api/Company` | List all companies. | 🔐 Auth |
 | `GET` | `/api/Company/{id}` | Get details (includes Tutor and Practices). | 🔐 Auth |
 | `POST` | `/api/Company` | Register a new company. | 🛡️ **Admin** |
 | `PUT` | `/api/Company/{id}` | Update company details. | 🔐 Auth |
