@@ -60,10 +60,60 @@ This API uses **JSON Web Tokens (JWT)** for security. Most endpoints are protect
 2.  **Login:** Authenticate using `/api/Auth/login`. The response will contain a `token` string.
 3.  **Access:** For any subsequent request to protected endpoints (Students, Companies, etc.), you must include the token in the **Authorization Section**, look for **Bearer Token** and place the created token in the slot.
 
-### Roles
-The system strictly enforces two roles:
-1.  **Admin:** Full access to all endpoints, including deleting records and managing sensitive data.
-2.  **User:** Read-only access or limited write permissions (depending on specific endpoint configuration).
+### User Roles
+The API handles two strict roles defined upon user creation:
+
+| Role | Description | Permissions |
+| :--- | :--- | :--- |
+| **User** | Students or general users. | Read-only access to their own resources and general lists. |
+| **Admin** | University administrators. | Full access (CRUD). The only role capable of **Creating** and **Deleting** master entities (Students, Companies, Tutors). |
+
+---
+
+## 📡 Endpoints
+
+### 👤 Auth (Authentication)
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/Auth/register` | Register a new user (User/Admin). | 🔓 Public |
+| `POST` | `/api/Auth/login` | Log in and obtain Access/Refresh Tokens. | 🔓 Public |
+| `POST` | `/api/Auth/refresh` | Renew Access Token using a Refresh Token. | 🔓 Public |
+
+### 🎓 Student
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/Student` | List all students. | 🔐 Auth |
+| `GET` | `/api/Student/{id}` | Get details of a specific student. | 🔐 Auth |
+| `POST` | `/api/Student` | Register a new student. | 🛡️ **Admin** |
+| `PUT` | `/api/Student/{id}` | Update contact/degree info. | 🔐 Auth |
+| `DELETE` | `/api/Student/{id}` | Delete a student. | 🛡️ **Admin** |
+
+### 🏢 Company
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/Company` | List all companies. | 🔓 Public |
+| `GET` | `/api/Company/{id}` | Get details (includes Tutor and Practices). | 🔐 Auth |
+| `POST` | `/api/Company` | Register a new company. | 🛡️ **Admin** |
+| `PUT` | `/api/Company/{id}` | Update company details. | 🔐 Auth |
+| `DELETE` | `/api/Company/{id}` | Delete a company. | 🛡️ **Admin** |
+
+### 👨‍🏫 Tutor
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/Tutor` | List all tutors. | 🔐 Auth |
+| `GET` | `/api/Tutor/{id}` | Get a specific tutor. | 🔐 Auth |
+| `POST` | `/api/Tutor` | Assign a tutor to a company. | 🛡️ **Admin** |
+| `PUT` | `/api/Tutor/{id}` | Edit tutor details. | 🛡️ **Admin** |
+| `DELETE` | `/api/Tutor/{id}` | Delete a tutor. | 🛡️ **Admin** |
+
+### 📋 Practice (Internships)
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/Practice` | List all internships. | 🔐 Auth |
+| `GET` | `/api/Practice/{id}` | Get internship details. | 🔐 Auth |
+| `POST` | `/api/Practice` | Create a new internship (Link Student-Company). | 🛡️ **Admin** |
+| `PUT` | `/api/Practice/{id}` | Update status or end date. | 🛡️ **Admin** |
+| `DELETE` | `/api/Practice/{id}` | Delete internship record. | 🛡️ **Admin** |
 
 ---
 
@@ -114,39 +164,219 @@ erDiagram
     COMPANY ||--|{ PRACTICE : "offers"
     STUDENT ||--|{ PRACTICE : "performs"
 ```
-## 📡 API Endpoints
+## ⏱️ TimeGate (Rate Limiting)
 
-| Module | Method | Endpoint | Description | Auth Required |
-| :--- | :---: | :--- | :--- | :---: |
-| **Auth** | `POST` | `/api/Auth/register` | Register a new user (`Admin` or `User`). | ❌ |
-| **Auth** | `POST` | `/api/Auth/login` | Authenticate and retrieve the Bearer Token. | ❌ |
-| **Student** | `GET` | `/api/Student` | Retrieve all registered students. | ✅ |
-| **Student** | `GET` | `/api/Student/{id}` | Get a specific student by ID. | ✅ |
-| **Student** | `POST` | `/api/Student` | Register a new student. | ✅ |
-| **Student** | `PUT` | `/api/Student/{id}` | Update student contact/academic info. | ✅ |
-| **Student** | `DELETE` | `/api/Student/{id}` | Remove a student. | ✅ |
-| **Company** | `GET` | `/api/Company` | List all partner companies. | ✅ |
-| **Company** | `POST` | `/api/Company` | Register a new company. | ✅ |
-| **Company** | `PUT` | `/api/Company/{id}` | Update company details. | ✅ |
-| **Company** | `DELETE` | `/api/Company/{id}` | Delete a company. | ✅ |
-| **Tutor** | `GET` | `/api/tutor` | List all corporate tutors. | ✅ |
-| **Tutor** | `POST` | `/api/tutor` | Create a tutor linked to a Company. | ✅ |
-| **Practice** | `GET` | `/api/practice` | List all internships. | ✅ |
-| **Practice** | `POST` | `/api/Practice` | Create a new internship (Links Student & Company). | ✅ |
-| **Practice** | `DELETE` | `/api/practice/{id}` | Delete an internship record. | ✅ |
+The system implements a **TimeGate (Rate Limiter)** configured in `Program.cs` to protect the API against abuse and Denial of Service (DoS) attacks.
+
+* **Configuration:** FixedWindow.
+* **Limit:** Maximum **10 requests every 10 seconds** per client.
+* **Exceeded Response:** The server will respond with a `429 Too Many Requests` status code.
 
 ---
 
-## 📝 Request & Response Examples
+## 🛠️ Installation & Configuration
 
-### 1. Authentication (Register)
-**Endpoint:** `POST /api/Auth/register`
+#### Prerequisites
+* .NET 9.0 SDK installed.
+* Docker Desktop installed and running.
+* Postman (optional, for testing).
 
-**Body:**
+#### Installation Steps
+
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/YOUR_USER/PasantiasTW.git](https://github.com/YOUR_USER/PasantiasTW.git)
+    cd PasantiasTW
+    ```
+
+2.  **Configure Environment Variables:**
+    Create a `.env` file in the root directory with the following content (based on `docker-compose.yml`):
+    ```env
+    POSTGRES_DB=pasantias_db
+    POSTGRES_USER=postgres
+    POSTGRES_PASSWORD=supersecret
+    JWT_KEY=ThisIsASuperSecretKeyLongEnoughForJWTToWork123!
+    JWT_ISSUER=PasantiasApi
+    JWT_AUDIENCE=PasantiasClient
+    ```
+
+3.  **Launch Infrastructure (Docker):**
+    This will automatically start the PostgreSQL database.
+    ```bash
+    docker-compose up -d
+    ```
+
+4.  **Run Migrations (Create Tables):**
+    ```bash
+    dotnet tool install --global dotnet-ef
+    dotnet ef migrations add InitialCreate
+    dotnet ef database update
+    ```
+
+5.  **Run the API:**
+    ```bash
+    dotnet run
+    ```
+
+The API will be available at the port indicated in the console.
+---
+## 🧪 Testing with Postman
+
+It is recommended to follow this specific order to test the complete functionality:
+
+1.  **Auth Folder:** Execute `Register` to create an **Admin** user and then `Login`.
+2.  **Configuration:** Copy the `token` received in the Login response. In Postman, go to the **Authorization** tab, select **Bearer Token**, and paste the token.
+3.  **Company Folder:** Create a company (`POST`). Copy its `id`.
+4.  **Student Folder:** Create a student (`POST`). Copy their `id`.
+5.  **Tutor Folder:** Create a tutor (`POST`) using the `companyId` created in step 3.
+6.  **Practice Folder:** Create an internship (`POST`) using the `studentId` and `companyId` obtained previously.
+7.  **Validation:** Use the `GET` endpoints in each folder to verify that the data has been saved and relationships are correctly established.
+
+---
+## 📝 Request Examples (Body)
+
+### 1. Register User
+**POST** `/api/Auth/register`
 ```json
 {
-    "Email": "admin@university.edu",
-    "Username": "SuperAdmin",
-    "Password": "SecurePassword123!",
-    "Role": "Admin"
+    "username": "AdminUser",
+    "email": "admin@university.edu",
+    "password": "SecurePassword123!",
+    "role": "Admin"
 }
+```
+### 2. Login User
+**POST** `/api/Auth/login`
+```json
+{
+    "email": "admin@university.edu",
+    "password": "SecurePassword123!"
+}
+```
+### 3. Create Student
+**POST** `/api/Student`
+```json
+{
+    "name": "John Doe",
+    "email": "john.doe@student.edu",
+    "carrer": "Systems Engineering",
+    "phone": "70123456"
+}
+```
+### 4. Create Company
+**POST** `/api/Company`
+```json
+{
+    "name": "Tech Solutions Inc.",
+    "address": "123 Innovation Blvd",
+    "phone": "44556677",
+    "email": "contact@techsolutions.com"
+}
+```
+### 5. Create Tutor
+**POST** `/api/Tutor`
+```json
+{
+  "name": "Alice Smith",
+  "phone": "60012345",
+  "companyId": "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+}
+```
+### 6. Create Practice
+**POST** `/api/Practice`
+```json
+{
+  "studentId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "companyId": "a2b45f64-5717-4562-b3fc-2c963f66afa1",
+  "startDate": "2025-08-01T00:00:00Z"
+}
+```
+---
+## 📄 Response Examples
+### Login Response (200 OK)
+```json
+{
+    "user": {
+        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "username": "AdminUser",
+        "email": "admin@university.edu"
+    },
+    "role": "Admin",
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "Ag6... (Secure String)",
+    "tokenType": "Bearer",
+    "expiresIn": 3600
+}
+```
+### Company Response (201 CREATED, 200 OK)
+```json
+{
+    "companyId": "a2b45f64-5717-4562-b3fc-2c963f66afa1",
+    "name": "Tech Solutions Inc.",
+    "address": "123 Innovation Blvd",
+    "phone": "44556677",
+    "email": "contact@techsolutions.com",
+    "tutor": {
+        "id": "b1b2c3d4-e5f6-7890-1234-567890abcdef",
+        "name": "Alice Smith",
+        "phone": "60012345",
+        "company": "Tech Solutions Inc.",
+        "companyId": "a2b45f64-5717-4562-b3fc-2c963f66afa1"
+    },
+    "students": [
+        {
+                "id": "1d638759-160e-4052-bd9b-10c60590633a",
+                "name": "Mariano Soria Rojas",
+                "email": "mariano.soria@example.com",
+                "carrer": "Systems Engineering ",
+                "phone": "78842256"
+        }
+    ],
+    "practices": [
+        {
+            "practiceId": "d4e55f64-5717-4562-b3fc-2c963f66afa9",
+            "status": 0,
+            "startDate": "2025-11-27T10:00:00Z",
+            "endDate": "2026-01-27T10:00:00Z"
+        }
+    ]
+}
+```
+### Tutor Response (201 CREATED, 200 OK)
+```json
+{
+    "id": "b1b2c3d4-e5f6-7890-1234-567890abcdef",
+    "name": "Alice Smith",
+    "phone": "60012345",
+    "company": "Tech Solutions Inc.",
+    "companyId": "a2b45f64-5717-4562-b3fc-2c963f66afa1"
+}
+```
+### Student Response (201 CREATED, 200 OK)
+```json
+{
+    "id": "1d638759-160e-4052-bd9b-10c60590633a",
+    "name": "Mariano Soria Rojas",
+    "email": "mariano.soria@example.com",
+    "carrer": "Systems Engineering ",
+    "phone": "78842256"
+}
+```
+### Practice Response (201 CREATED,200 OK)
+```json
+{
+    "practiceId": "3beaf7ed-722c-4b71-8aef-d0c9e98c0374",
+    "startDate": "2025-08-01T00:00:00Z",
+    "endDate": "2026-01-28T02:58:44.0810282Z",
+    "status": 0,
+    "student": {
+        "studentId": "1d638759-160e-4052-bd9b-10c60590633a",
+        "name": "Mariano Soria Rojas",
+        "career": "Ingeniería Civil"
+    },
+    "company": {
+        "companyId": "5e9c4721-233a-4c17-81a9-3022dd99c73b",
+        "name": "TechCorp Bolivia"
+    }
+}
+```
