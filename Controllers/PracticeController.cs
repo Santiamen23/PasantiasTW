@@ -30,7 +30,7 @@ namespace PasantiasTW.Controllers
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
             var practice = await _service.GetById(id);
-            return practice is null ? NotFound() : Ok(practice);
+            return practice is null ? NotFound(new { error = "Practice not found", code = 404 }) : Ok(practice);
         }
 
         [HttpPost]
@@ -48,7 +48,7 @@ namespace PasantiasTW.Controllers
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
             var updatedPractice = await _service.Update(id, dto);
-            return updatedPractice is null ? NotFound() : Ok(updatedPractice);
+            return updatedPractice is null ? NotFound(new { error = "Practice not found", code = 404 }) : Ok(updatedPractice);
         }
 
         [HttpDelete("{id}")]

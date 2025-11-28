@@ -45,7 +45,7 @@ namespace PasantiasTW.Controllers
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
             var update = await _service.UpdateStudent(dto, id);
-            return Ok(update);
+            return update is null ? NotFound(new { error = "Student not found", code = 404 }) : Ok(update);
         }
 
         [HttpDelete("{id:guid}")]

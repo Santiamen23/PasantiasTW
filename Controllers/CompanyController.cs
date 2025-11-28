@@ -17,6 +17,7 @@ namespace PasantiasTW.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<CompanyResponseDto>>> GetAllCompanies()
         {
             var items = await _service.GetAll();
@@ -45,7 +46,7 @@ namespace PasantiasTW.Controllers
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
             var updated = await _service.UpdateCompany(dto, id);
-            return Ok(updated);
+            return updated is null ? NotFound(new { error = "Company not found", code = 404 }) : Ok(updated);
         }
 
         [HttpDelete("{id:guid}")]

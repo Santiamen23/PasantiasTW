@@ -29,7 +29,7 @@ namespace PasantiasTW.Controllers
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
             var tutor = await _service.getById(id);
-            return tutor is null?NotFound():Ok(tutor);
+            return tutor is null?NotFound(new { error = "Tutor not found", code = 404 }) :Ok(tutor);
         }
 
         [HttpPost]
@@ -47,7 +47,7 @@ namespace PasantiasTW.Controllers
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
             var updatedTutor = await _service.update(id, dto);
-            return updatedTutor is null ? NotFound() : Ok(updatedTutor);
+            return updatedTutor is null ? NotFound(new { error = "Tutor not found", code = 404 }) : Ok(updatedTutor);
         }
 
         [HttpDelete("{id}")]
