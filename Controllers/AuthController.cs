@@ -55,5 +55,12 @@ namespace PasantiasTW.Controllers
 
             return Ok();
         }
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> resetPassword(ResetPasswordDto dto)
+        {
+            var token = await _service.resetPassword(dto);
+            if (token == null) return NotFound(new { message = "user email not found", status = 404 });
+            return Ok(token);
+        }
     }
 }

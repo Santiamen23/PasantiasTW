@@ -9,5 +9,7 @@ namespace PasantiasTW.Services
 
         Task<(bool ok, LoginResponseDto? response)> refresh(RefreshRequestDto dto);
         Task<bool> LogoutAsync(string userId);
+
+        Task<ResponceTokenDto> resetPassword(ResetPasswordDto dto);
     }
 }

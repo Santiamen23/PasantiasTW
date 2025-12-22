@@ -162,5 +162,21 @@ namespace PasantiasTW.Services
             return true;
         }
 
+        public Task<ResponceTokenDto> resetPassword(ResetPasswordDto dto)
+        {
+            var user = _users.GetByEmailAddress(dto.Email);
+            var token = new ResponceTokenDto
+            {
+                Token = ((int)DateTime.Now.TimeOfDay.TotalMinutes).ToString()
+            };
+            if(user != null)
+            {
+                return Task.FromResult(token);
+            }
+            else
+            {
+                return Task.FromResult<ResponceTokenDto>(null);
+            }
+        }
     }
 }
